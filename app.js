@@ -17,7 +17,6 @@ function fillDiv(e) {
       this.style.backgroundColor = selectedColor;
     }
   }
-  // console.log(this.style.backgroundColor);
 }
 
 function setRainbowColor(div) {
@@ -25,8 +24,8 @@ function setRainbowColor(div) {
 
   if (currentColor === "" || currentColor === "white") {
     let randomColor = Math.floor(Math.random()*16777215).toString(16);
-    for(let i = randomColor.length; i < 6; i++){
-      randomColor = "0" + randomColor;
+    for(let i = randomColor.length; i < 6; i++){ 
+      randomColor = "0" + randomColor; // add 0s if needed
     }
     div.style.backgroundColor = "#" + randomColor;
   } else if (currentColor === "rgb(0, 0, 0)" || currentColor === "black") {
@@ -72,8 +71,10 @@ window.addEventListener('mouseup', () => {
 });
 
 function clearGrid() {
-  let gridSize = Number(window.prompt("Number of squares per side for the new grid?", currentGridSize));
-  if (gridSize === 0) return;
+  let gridSize = Number(window.prompt("Number of squares per side for the new grid? [1, 96]", currentGridSize));
+  while (gridSize <= 0 || gridSize > 96) {
+    gridSize = Number(window.prompt("Invalid size. Please enter a valid number: [1, 96]", currentGridSize));
+  }
   if (gridSize === currentGridSize) { // Clearing all cells is faster than creating a new grid
     const squares = Array.from(divContainer.children);
     squares.forEach(div => div.style.backgroundColor = "white");
