@@ -4,6 +4,8 @@ const colorBtn = document.querySelector('.color-btn');
 const rainbowBtn = document.querySelector('.rainbow-btn');
 const eraseBtn = document.querySelector('.erase-btn');
 
+const MAX_GRID_SIZE = 64;
+
 let selectedColor = "black";
 let currentGridSize = 16;
 let mousedown = 0;
@@ -24,7 +26,7 @@ function setRainbowColor(div) {
 
   if (currentColor === "" || currentColor === "white") {
     let randomColor = Math.floor(Math.random()*16777215).toString(16);
-    for(let i = randomColor.length; i < 6; i++){ 
+    for(let i = randomColor.length; i < 6; i++) {
       randomColor = "0" + randomColor; // add 0s if needed
     }
     div.style.backgroundColor = "#" + randomColor;
@@ -71,9 +73,15 @@ window.addEventListener('mouseup', () => {
 });
 
 function clearGrid() {
-  let gridSize = Number(window.prompt("Number of squares per side for the new grid? [1, 96]", currentGridSize));
-  while (gridSize <= 0 || gridSize > 96) {
-    gridSize = Number(window.prompt("Invalid size. Please enter a valid number: [1, 96]", currentGridSize));
+  let gridSize = window.prompt(
+    `Number of squares per side for the new grid? [1, ${MAX_GRID_SIZE}]`, currentGridSize);
+  if (gridSize === null) return;
+  gridSize = Number(gridSize);
+  while (!Number.isInteger(gridSize) || gridSize <= 0 || gridSize > MAX_GRID_SIZE) {
+    gridSize = window.prompt(
+      `Invalid input. Please enter a valid number: [1, ${MAX_GRID_SIZE}]`, currentGridSize);
+    if (gridSize === null) return;
+    gridSize = Number(gridSize);
   }
   if (gridSize === currentGridSize) { // Clearing all cells is faster than creating a new grid
     const squares = Array.from(divContainer.children);
