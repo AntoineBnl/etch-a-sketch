@@ -29,7 +29,7 @@ function setRainbowColor(div) {
       randomColor = "0" + randomColor;
     }
     div.style.backgroundColor = "#" + randomColor;
-  } else if (currentColor === "#000000" || currentColor === "black") {
+  } else if (currentColor === "rgb(0, 0, 0)" || currentColor === "black") {
     return;
   } else {
     div.style.backgroundColor = darkenColor(currentColor, 25);
@@ -39,23 +39,13 @@ function setRainbowColor(div) {
 function darkenColor(rgb, amount) {
   rgb = rgb.substr(4).split(")")[0].split(", "); // Turn "rgb(r, g, b)" into [r, g, b]
 
-  let r = +rgb[0];
-  let g = +rgb[1];
-  let b = +rgb[2];
+  for(let i = 0; i < rgb.length; i++) { // darken and convert values to hex
+    rgb[i] = Math.max(0, rgb[i] - amount);
+    rgb[i] = rgb[i].toString(16);
+    if (rgb[i].length == 1) rgb[i] = "0" + rgb[i];
+  }
 
-  r = Math.max(0, r - amount);
-  g = Math.max(0, g - amount);
-  b = Math.max(0, b - amount);
-
-  r = r.toString(16);
-  g = g.toString(16);
-  b = b.toString(16);
-
-  if (r.length == 1) r = "0" + r;
-  if (g.length == 1) g = "0" + g;
-  if (b.length == 1) b = "0" + b;
-
-  return "#" + r + g + b;
+  return "#" + rgb.join("");
 }
 
 function populateGrid(n) {
