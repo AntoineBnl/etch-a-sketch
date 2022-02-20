@@ -12,7 +12,7 @@ let rainbowMode = 0;
 function fillDiv(e) {
   if (mousedown === 1 || e.type === 'mousedown') {
     if (rainbowMode) {
-      this.style.backgroundColor = getRainbowColor(this);
+      setRainbowColor(this);
     } else {
       this.style.backgroundColor = selectedColor;
     }
@@ -20,14 +20,19 @@ function fillDiv(e) {
   // console.log(this.style.backgroundColor);
 }
 
-function getRainbowColor(div) {
+function setRainbowColor(div) {
   let currentColor = div.style.backgroundColor;
 
   if (currentColor === "" || currentColor === "white") {
-    let randomColor = "#" + Math.floor(Math.random()*16777215).toString(16);
-    return randomColor;
+    let randomColor = Math.floor(Math.random()*16777215).toString(16);
+    for(let i = randomColor.length; i < 6; i++){
+      randomColor = "0" + randomColor;
+    }
+    div.style.backgroundColor = "#" + randomColor;
+  } else if (currentColor === "#000000" || currentColor === "black") {
+    return;
   } else {
-    return darkenColor(currentColor, 25);
+    div.style.backgroundColor = darkenColor(currentColor, 25);
   }
 }
 
@@ -64,8 +69,8 @@ function populateGrid(n) {
     div.addEventListener('mouseover', fillDiv);
     div.addEventListener('mousedown', fillDiv);
     divContainer.appendChild(div);
-    currentGridSize = n;
   }
+  currentGridSize = n;
 }
 
 divContainer.addEventListener('mousedown', () => {
